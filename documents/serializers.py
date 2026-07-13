@@ -2,7 +2,7 @@ from pathlib import Path
 
 from rest_framework import serializers
 
-from .models import Document
+from .models import Document, DocumentChunk
 
 
 class DocumentSerializer(serializers.ModelSerializer):
@@ -42,3 +42,15 @@ class DocumentSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+
+class DocumentChunkSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = DocumentChunk
+        fields = [
+            "document",
+            "chunk_index",
+            "content",
+            "created_at",
+        ]
+        
