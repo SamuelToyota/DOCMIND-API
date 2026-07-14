@@ -1,6 +1,27 @@
 from io import BytesIO
 from pathlib import Path
 
+def extract_text_from_docx(file):
+    from docx import Document as WordDocument
+
+    file.open("rb")
+
+    try:
+        content = file.read()
+    finally:
+        file.close()
+
+    document = WordDocument(BytesIO(content))
+    paragraphs = []
+
+    for paragraph in document.paragraphs:
+        text = paragraph.text.strip()
+
+        if text:
+            paragraphs.append(text)
+
+    return "\n\n".join(paragraphs).strip()
+
 
 def extract_text_from_pdf(file):
     from pypdf import PdfReader
@@ -41,7 +62,7 @@ def extract_text_from_document(document):
         return extract_text_from_pdf(document.file)
 
     if extension == ".docx":
-        return ""
+        return extract_text_from_docx(document.file)
 
     return ""
 
