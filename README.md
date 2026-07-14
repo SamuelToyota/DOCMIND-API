@@ -196,7 +196,7 @@ DOCMIND-API/
 |   +-- urls.py
 |   +-- views.py
 +-- docker-compose.yml
-+-- dockerfile
++-- Dockerfile
 +-- manage.py
 +-- requirements.txt
 +-- README.md

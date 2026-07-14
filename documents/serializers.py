@@ -45,12 +45,19 @@ class DocumentSerializer(serializers.ModelSerializer):
 
 
 class DocumentChunkSerializer(serializers.ModelSerializer):
-     class Meta:
+    class Meta:
         model = DocumentChunk
         fields = [
+            "id",
             "document",
             "chunk_index",
             "content",
             "created_at",
         ]
-        
+        read_only_fields = [
+            "id",
+            "document",
+            "chunk_index",
+            "content",
+            "created_at",
+        ]
