@@ -22,6 +22,7 @@ class DocumentSerializer(serializers.ModelSerializer):
 
         return file
 
+
     class Meta:
         model = Document
         fields = [
@@ -39,6 +40,7 @@ class DocumentSerializer(serializers.ModelSerializer):
             "owner",
             "text_content",
             "status",
+            "error_message",
             "created_at",
             "updated_at",
         ]

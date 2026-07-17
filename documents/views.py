@@ -26,8 +26,9 @@ class DocumentViewSet(viewsets.ModelViewSet):
             chunks = split_text_into_chunks(text)
 
             document.text_content = text
+            document.error_message = ""
             document.status = "ready"
-            document.save(update_fields=["text_content", "status", "updated_at"])
+            document.save(update_fields=["text_content", "status","error_message", "updated_at"])
 
             for index, chunk in enumerate(chunks):
                 DocumentChunk.objects.create(
@@ -36,9 +37,10 @@ class DocumentViewSet(viewsets.ModelViewSet):
                     content=chunk,
                 )
 
-        except Exception:
+        except Exception as error:
             document.status = "failed"
-            document.save(update_fields=["status", "updated_at"])
+            document.error_message = str(error)
+            document.save(update_fields=["status", "error_message", "updated_at"])
 
     @action(detail=True, methods=["get"])
     def chunks(self, request, pk=None):
