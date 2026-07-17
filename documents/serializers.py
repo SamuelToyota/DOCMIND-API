@@ -32,6 +32,7 @@ class DocumentSerializer(serializers.ModelSerializer):
             "file",
             "text_content",
             "status",
+            "error_message",
             "created_at",
             "updated_at",
         ]

@@ -23,7 +23,7 @@ class Document(models.Model):
     choices=STATUS_CHOICES,
     default="uploaded"
   )
-  error_message = models.TextField(max_length=200)
+  error_message = models.TextField(blank=True)
 
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)

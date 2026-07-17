@@ -1,6 +1,6 @@
 # DOCMIND-API
 
-DOCMIND-API e uma API REST desenvolvida com Django para upload, autenticacao e processamento de documentos. O projeto permite que usuarios autenticados enviem arquivos, tenham seus documentos associados automaticamente a propria conta e iniciem um fluxo de processamento com extracao de texto e divisao do conteudo em chunks.
+DOCMIND-API e uma API REST desenvolvida com Django para upload, autenticacao e processamento de documentos. O projeto permite que usuarios autenticados enviem arquivos, tenham seus documentos associados automaticamente a propria conta e iniciem um fluxo de processamento com extracao de texto, divisao do conteudo em chunks e consulta desses chunks pela API.
 
 O objetivo do projeto e servir como base para uma aplicacao de leitura inteligente de documentos, preparando o backend para etapas futuras como busca semantica, embeddings, resumos automaticos e perguntas e respostas com IA.
 
@@ -23,9 +23,12 @@ O objetivo do projeto e servir como base para uma aplicacao de leitura inteligen
 - Validacao de extensoes permitidas.
 - Associacao automatica do documento ao usuario logado.
 - Extracao de texto de arquivos `.txt`.
+- Extracao de texto de PDFs com texto selecionavel.
+- Extracao de texto de arquivos `.docx`.
 - Controle de status do processamento.
 - Divisao do texto extraido em chunks.
 - Persistencia dos chunks relacionados ao documento.
+- Consulta dos chunks de um documento pela API.
 - Ambiente containerizado com Docker e Docker Compose.
 
 ## Fluxo De Processamento
@@ -69,6 +72,7 @@ POST /api/auth/token/refresh/
 GET    /api/documents/
 POST   /api/documents/
 GET    /api/documents/{id}/
+GET    /api/documents/{id}/chunks/
 PUT    /api/documents/{id}/
 PATCH  /api/documents/{id}/
 DELETE /api/documents/{id}/
@@ -116,7 +120,9 @@ Tamanho maximo:
 10 MB
 ```
 
-No estado atual do projeto, a extracao de texto esta implementada para arquivos `.txt`.
+No estado atual do projeto, a extracao de texto esta implementada para arquivos `.txt`, PDFs com texto selecionavel e arquivos `.docx`.
+
+Observacao: PDFs escaneados como imagem ainda nao passam por OCR, entao podem retornar pouco ou nenhum texto.
 
 ## Rodando Com Docker Compose
 
@@ -196,6 +202,7 @@ DOCMIND-API/
 |   +-- urls.py
 |   +-- views.py
 +-- docker-compose.yml
++-- .dockerignore
 +-- Dockerfile
 +-- manage.py
 +-- requirements.txt
@@ -215,6 +222,7 @@ Campos principais:
 - `file`
 - `text_content`
 - `status`
+- `error_message`
 - `created_at`
 - `updated_at`
 
@@ -240,13 +248,13 @@ failed      Falha durante o processamento
 
 ## Proximos Passos
 
-- Expor uma rota especifica para consultar chunks de um documento.
-- Implementar extracao de texto para PDF e DOCX.
 - Adicionar testes automatizados para upload e processamento.
+- Melhorar tratamento de arquivos sem texto extraivel.
+- Evitar recriacao duplicada de chunks em fluxos futuros de reprocessamento.
 - Preparar embeddings a partir dos chunks.
 - Implementar busca semantica sobre documentos.
 - Evoluir para um fluxo de perguntas e respostas com IA.
 
 ## Resumo
 
-DOCMIND-API e uma base backend para processamento inteligente de documentos. O projeto ja possui autenticacao JWT, upload protegido, validacao de arquivos, extracao de texto, chunking e execucao com Docker, formando uma fundacao solida para recursos futuros de IA aplicada a documentos.
+DOCMIND-API e uma base backend para processamento inteligente de documentos. O projeto ja possui autenticacao JWT, upload protegido, validacao de arquivos, extracao de texto de TXT, PDF e DOCX, chunking, consulta de chunks e execucao com Docker, formando uma fundacao solida para recursos futuros de IA aplicada a documentos.
