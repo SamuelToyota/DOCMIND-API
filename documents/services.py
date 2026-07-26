@@ -1,5 +1,39 @@
 from io import BytesIO
 from pathlib import Path
+import re
+
+
+EMAIL_PATTERN = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"
+PHONE_PATTERN = (
+    r"(?<!\d)"
+    r"(?:\+?55[\s.-]*)?"
+    r"\(?\d{2}\)?[\s.-]*"
+    r"\d{4,5}[\s.-]*\d{4}"
+    r"(?!\d)"
+)
+
+
+def extract_emails(text):
+    emails = re.findall(EMAIL_PATTERN, text)
+
+    normalized_emails = {
+        email.lower()
+        for email in emails
+    }
+
+    return sorted(normalized_emails)
+
+
+def extract_phones(text):
+    phones = re.findall(PHONE_PATTERN, text)
+
+    normalized_phones = {
+        re.sub(r"\D", "", phone)
+        for phone in phones
+    }
+
+    return sorted(normalized_phones)
+
 
 def extract_text_from_docx(file):
     from docx import Document as WordDocument
@@ -81,3 +115,5 @@ def split_text_into_chunks(text, chunk_size=1000, overlap=200):
         start += chunk_size - overlap
 
     return chunks
+
+

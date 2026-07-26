@@ -18,6 +18,14 @@ class Document(models.Model):
   title = models.CharField(max_length=255)
   file = models.FileField(upload_to="documents/")
   text_content = models.TextField(blank=True)
+  extracted_emails = models.JSONField(
+    default=dict,
+    blank=True,
+)
+  extracted_phones = models.JSONField(
+      default=dict,
+      blank=True,
+  )
   status = models.CharField(
     max_length=20,
     choices=STATUS_CHOICES,
@@ -40,6 +48,7 @@ class DocumentChunk(models.Model):
   )
   chunk_index = models.PositiveIntegerField()
   content = models.TextField()
+  embedding = models.JSONField(null=True, blank=True)
   created_at = models.DateTimeField(auto_now_add=True)
 
 

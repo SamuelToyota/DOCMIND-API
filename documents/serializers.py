@@ -12,6 +12,7 @@ class DocumentSerializer(serializers.ModelSerializer):
         if file.size > max_size:
             raise serializers.ValidationError("O arquivo nao pode passar de 10 MB.")
 
+
         extension = Path(file.name).suffix.lower()
         allowed_extensions = {".pdf", ".txt", ".docx"}
 
@@ -31,6 +32,8 @@ class DocumentSerializer(serializers.ModelSerializer):
             "title",
             "file",
             "text_content",
+            "extracted_emails",
+            "extracted_phones",
             "status",
             "error_message",
             "created_at",
@@ -40,6 +43,8 @@ class DocumentSerializer(serializers.ModelSerializer):
             "id",
             "owner",
             "text_content",
+            "extracted_emails",
+            "extracted_phones",
             "status",
             "error_message",
             "created_at",

@@ -5,7 +5,12 @@ from rest_framework.response import Response
 
 from .models import Document, DocumentChunk
 from .serializers import DocumentSerializer, DocumentChunkSerializer
-from .services import extract_text_from_document, split_text_into_chunks
+from .services import (
+    extract_text_from_document,
+    split_text_into_chunks,
+    extract_emails,
+    extract_phones
+)
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
@@ -23,21 +28,45 @@ class DocumentViewSet(viewsets.ModelViewSet):
             document.save(update_fields=["status"])
 
             text = extract_text_from_document(document)
-            chunks = split_text_into_chunks(text)
 
-            document.text_content = text
-            document.error_message = ""
-            document.status = "ready"
-            document.save(update_fields=["text_content", "status","error_message", "updated_at"])
+            if not text:
+                raise ValueError("Nao foi possivel extrair texto do documento.")
+
+            emails = extract_emails(text)
+            chunks = split_text_into_chunks(text)
+            phones = extract_phones(text)
 
             for index, chunk in enumerate(chunks):
+
                 DocumentChunk.objects.create(
                     document=document,
                     chunk_index=index,
                     content=chunk,
                 )
 
+            document.text_content = text
+            document.extracted_emails = {
+                "emails": emails,
+            }
+            document.extracted_phones = {
+                "phones": phones,
+            }
+
+            document.error_message = ""
+            document.status = "ready"
+            document.save(
+                update_fields=[
+                    "text_content",
+                    "extracted_emails",
+                    "extracted_phones",
+                    "status",
+                    "error_message",
+                    "updated_at",
+                ]
+            )
+
         except Exception as error:
+            document.chunks.all().delete()
             document.status = "failed"
             document.error_message = str(error)
             document.save(update_fields=["status", "error_message", "updated_at"])

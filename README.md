@@ -11,8 +11,6 @@ O objetivo do projeto e servir como base para uma aplicacao de leitura inteligen
 - Django REST Framework
 - SimpleJWT
 - SQLite
-- Docker
-- Docker Compose
 
 ## Funcionalidades
 
@@ -29,7 +27,6 @@ O objetivo do projeto e servir como base para uma aplicacao de leitura inteligen
 - Divisao do texto extraido em chunks.
 - Persistencia dos chunks relacionados ao documento.
 - Consulta dos chunks de um documento pela API.
-- Ambiente containerizado com Docker e Docker Compose.
 
 ## Fluxo De Processamento
 
@@ -83,7 +80,7 @@ A listagem de documentos retorna apenas os documentos do usuario autenticado.
 ## Exemplo De Autenticacao
 
 ```bash
-curl -X POST http://localhost:2222/api/auth/token/ \
+curl -X POST http://localhost:8000/api/auth/token/ \
   -H "Content-Type: application/json" \
   -d "{\"username\":\"seu_usuario\",\"password\":\"sua_senha\"}"
 ```
@@ -100,7 +97,7 @@ Resposta esperada:
 ## Exemplo De Upload
 
 ```bash
-curl -X POST http://localhost:2222/api/documents/ \
+curl -X POST http://localhost:8000/api/documents/ \
   -H "Authorization: Bearer seu_access_token" \
   -F "title=Meu documento" \
   -F "file=@documento.txt"
@@ -124,39 +121,7 @@ No estado atual do projeto, a extracao de texto esta implementada para arquivos 
 
 Observacao: PDFs escaneados como imagem ainda nao passam por OCR, entao podem retornar pouco ou nenhum texto.
 
-## Rodando Com Docker Compose
-
-Suba a aplicacao com:
-
-```bash
-docker compose up
-```
-
-Ou, se precisar reconstruir a imagem:
-
-```bash
-docker compose up --build
-```
-
-A API fica disponivel em:
-
-```txt
-http://localhost:2222
-```
-
-Exemplo:
-
-```txt
-http://localhost:2222/api/documents/
-```
-
-Para parar:
-
-```bash
-docker compose down
-```
-
-## Rodando Localmente
+## Como Executar
 
 Crie e ative um ambiente virtual:
 
@@ -188,6 +153,18 @@ Inicie o servidor:
 python manage.py runserver
 ```
 
+A API fica disponivel em:
+
+```txt
+http://localhost:8000
+```
+
+Exemplo:
+
+```txt
+http://localhost:8000/api/documents/
+```
+
 ## Estrutura Principal
 
 ```txt
@@ -201,9 +178,6 @@ DOCMIND-API/
 |   +-- services.py
 |   +-- urls.py
 |   +-- views.py
-+-- docker-compose.yml
-+-- .dockerignore
-+-- Dockerfile
 +-- manage.py
 +-- requirements.txt
 +-- README.md
@@ -257,4 +231,4 @@ failed      Falha durante o processamento
 
 ## Resumo
 
-DOCMIND-API e uma base backend para processamento inteligente de documentos. O projeto ja possui autenticacao JWT, upload protegido, validacao de arquivos, extracao de texto de TXT, PDF e DOCX, chunking, consulta de chunks e execucao com Docker, formando uma fundacao solida para recursos futuros de IA aplicada a documentos.
+DOCMIND-API e uma base backend para processamento inteligente de documentos. O projeto ja possui autenticacao JWT, upload protegido, validacao de arquivos, extracao de texto de TXT, PDF e DOCX, chunking e consulta de chunks, formando uma fundacao solida para recursos futuros de IA aplicada a documentos.
